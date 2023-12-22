@@ -4,16 +4,13 @@ let testArrSorted = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
 let testArrUnsorted = [22, 57, 63, 19, 3, 11, 66, 23];
 let testArrUnsortedDuplicates = [22, 57, 22, 19, 3, 11, 57, 23];
 
-class Node {
-  constructor(value) {
-    this.value = value;
-    this.left = null;
-    this.right - null;
-  }
-}
-function buildTree(arr) {
-  return;
-}
+const Node = (value = null, leftChild = null, rightChild = null) => {
+  return {
+    value,
+    leftChild,
+    rightChild,
+  };
+};
 
 class Tree {
   constructor(arr) {
@@ -25,29 +22,43 @@ class Tree {
       return arr.filter((item, index) => arr.indexOf(item) === index);
     }
     this.arr = removeDuplicates(arr);
-    this.root = buildTree(arr);
-    this.size = 0;
+
+    // build the tree
+    this.root = this.buildTree(arr);
   }
-  out() {
-    return this.arr;
-  }
+
   buildTree(arr) {
-    return;
+    if (arr.length === 0) return null;
+
+    const midpoint = Math.floor(arr.length / 2);
+    const newNode = Node(arr[midpoint]);
+    newNode.leftChild = this.buildTree(arr.slice(0, midpoint));
+    newNode.rightChild = this.buildTree(arr.slice(midpoint + 1));
+    return newNode;
+  }
+
+  prettyPrint(node = this.root, prefix = "", isLeft = true) {
+    if (node.rightChild) {
+      this.prettyPrint(
+        node.rightChild,
+        `${prefix}${isLeft ? "|   " : "    "}`,
+        false
+      );
+    }
+    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.value}`);
+    if (node.leftChild) {
+      this.prettyPrint(
+        node.leftChild,
+        `${prefix}${isLeft ? "    " : "|   "}`,
+        true
+      );
+    }
+  }
+  arrayOut() {
+    return this.arr;
   }
 }
 
-const prettyPrint = (node, prefix = "", isLeft = true) => {
-  if (node === null) {
-    return;
-  }
-  if (node.right !== null) {
-    prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
-  }
-  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
-  if (node.left !== null) {
-    prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
-  }
-};
-
-let myTree = new Tree(testArrSorted);
-console.log(myTree.out());
+const myTree = new Tree(testArrSorted);
+console.log(myTree.arrayOut());
+myTree.prettyPrint();
