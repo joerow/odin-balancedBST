@@ -57,8 +57,46 @@ class Tree {
   arrayOut() {
     return this.arr;
   }
+
+  insert(newVal, current = this.root) {
+    if (newVal < current.value && current.leftChild == null) {
+      current.leftChild = Node(newVal);
+      return;
+    } else if (newVal > current.value && current.rightChild == null) {
+      current.rightChild = Node(newVal);
+    } else if (newVal < current.value) {
+      current = current.leftChild;
+      this.insert(newVal, current);
+    } else if (newVal > current.value) {
+      current = current.rightChild;
+      this.insert(newVal, current);
+    }
+  }
+
+  delete(delVal, current = this.root, parent = null, isLeft = null) {
+    if (delVal == current.value && parent == null) {
+      console.log("cannot delete the root node");
+      return;
+    } else if (delVal == current && parent != null && isLeft != null) {
+      if (isLeft == true) {
+        parent.leftChild = null;
+      } else {
+        parent.rightChild = null;
+      }
+      return;
+    } else if (delVal < current.value) {
+      let parent = current;
+      current = current.leftChild;
+      this.delete(delVal, current, parent, true);
+    }
+  }
 }
 
 const myTree = new Tree(testArrSorted);
 console.log(myTree.arrayOut());
+myTree.insert(4);
+myTree.insert(6);
+myTree.insert(77);
+myTree.prettyPrint();
+myTree.delete(3);
 myTree.prettyPrint();
