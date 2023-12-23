@@ -139,7 +139,7 @@ class Tree {
       //reset position in the tree for current
       current = currentSaved;
       current.value = successor.value;
-      //current.rightChild = successorParent
+      //TODO fix this part. current.rightChild = successorParent
     }
 
     //iterates through the tree to find the node to delete
