@@ -104,7 +104,7 @@ class Tree {
     } else if (
       delVal === current.value &&
       parent != null &&
-      (current.leftChild != null || current.rightChild != null)
+      (current.leftChild == null || current.rightChild == null)
     ) {
       if (current.leftChild != null && isLeft) {
         parent.leftChild = current.leftChild;
@@ -115,7 +115,33 @@ class Tree {
       } else if (current.rightChild != null && !isLeft) {
         parent.rightChild = current.rightChild;
       }
+      return;
     }
+    // this is for nodes with 2 children. Replaces via the inorder successor
+    else if (
+      delVal === current.value &&
+      parent != null &&
+      current.leftChild != null &&
+      current.rightChild != null
+    ) {
+      //store the current and find the successor
+      let successor = Node(null);
+      let successorParent = Node(null);
+      let currentSaved = current;
+      current = current.rightChild;
+      while (current.leftChild) {
+        successor = current;
+        successorParent = current;
+        current = current.leftChild;
+      }
+      //delete the successor
+      successorParent = null;
+      //reset position in the tree for current
+      current = currentSaved;
+      current.value = successor.value;
+      //current.rightChild = successorParent
+    }
+
     //iterates through the tree to find the node to delete
     //setting it as current and storing the parent node
     else if (delVal < current.value) {
@@ -139,4 +165,8 @@ myTree.prettyPrint();
 myTree.delete(19);
 myTree.prettyPrint();
 myTree.delete(15);
+myTree.prettyPrint();
+myTree.delete(9);
+myTree.prettyPrint();
+myTree.delete(5);
 myTree.prettyPrint();
