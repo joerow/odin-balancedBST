@@ -73,11 +73,25 @@ class Tree {
     }
   }
 
-  delete(delVal, current = this.root, parent = null, isLeft = null) {
+  delete(
+    delVal,
+    current = this.root,
+    parent = null,
+    isLeft = null,
+    leftChild = null,
+    rightChild = null
+  ) {
+    leftChild = current.leftChild;
+    rightChild = current.rightChild;
     if (delVal == current.value && parent == null) {
       console.log("cannot delete the root node");
       return;
-    } else if (delVal == current && parent != null && isLeft != null) {
+    } else if (
+      delVal === current.value &&
+      parent != null &&
+      current.leftChild == null &&
+      current.rightChild == null
+    ) {
       if (isLeft == true) {
         parent.leftChild = null;
       } else {
@@ -98,5 +112,7 @@ myTree.insert(4);
 myTree.insert(6);
 myTree.insert(77);
 myTree.prettyPrint();
-myTree.delete(3);
+myTree.delete(1);
+myTree.prettyPrint();
+myTree.delete(4);
 myTree.prettyPrint();
