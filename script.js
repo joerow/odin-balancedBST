@@ -87,6 +87,8 @@ class Tree {
       console.log("cannot delete the root node");
       return;
     } else if (
+      // this is for leaf nodes with no children
+      // deletes the node link on the parent
       delVal === current.value &&
       parent != null &&
       current.leftChild == null &&
@@ -98,10 +100,32 @@ class Tree {
         parent.rightChild = null;
       }
       return;
-    } else if (delVal < current.value) {
+      //this is for nodes with one child
+    } else if (
+      delVal === current.value &&
+      parent != null &&
+      (current.leftChild != null || current.rightChild != null)
+    ) {
+      if (current.leftChild != null && isLeft) {
+        parent.leftChild = current.leftChild;
+      } else if (current.leftChild != null && !isLeft) {
+        parent.rightChild = current.leftChild;
+      } else if (current.rightChild != null && isLeft) {
+        parent.leftChild = current.rightChild;
+      } else if (current.rightChild != null && !isLeft) {
+        parent.rightChild = current.rightChild;
+      }
+    }
+    //iterates through the tree to find the node to delete
+    //setting it as current and storing the parent node
+    else if (delVal < current.value) {
       let parent = current;
       current = current.leftChild;
       this.delete(delVal, current, parent, true);
+    } else if (delVal > current.value) {
+      let parent = current;
+      current = current.rightChild;
+      this.delete(delVal, current, parent, false);
     }
   }
 }
@@ -112,7 +136,7 @@ myTree.insert(4);
 myTree.insert(6);
 myTree.insert(77);
 myTree.prettyPrint();
-myTree.delete(1);
+myTree.delete(19);
 myTree.prettyPrint();
-myTree.delete(4);
+myTree.delete(15);
 myTree.prettyPrint();
