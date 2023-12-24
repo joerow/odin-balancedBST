@@ -127,19 +127,34 @@ class Tree {
       //store the current and find the successor
       let successor = Node(null);
       let successorParent = Node(null);
-      let currentSaved = current;
-      current = current.rightChild;
+      let nodeToDelete = current;
+
+      current = nodeToDelete.rightChild;
+      successor = current;
+      successorParent = current;
       while (current.leftChild) {
         successor = current;
         successorParent = current;
         current = current.leftChild;
       }
+      successor = current;
       //delete the successor
-      successorParent = null;
+      successorParent.leftChild = null;
       //reset position in the tree for current
-      current = currentSaved;
-      current.value = successor.value;
-      //TODO fix this part. current.rightChild = successorParent
+      current = nodeToDelete;
+      //preserve the left children of the node to delete
+      successor.leftChild = nodeToDelete.leftChild;
+      // replace the node to delete with the successor
+      current = successor;
+      //link from the parent to the replacement node
+      if (isLeft) {
+        parent.leftChild = successor;
+      } else {
+        parent.rightChild = successor;
+      }
+      //preserve the right children of the node to delete.
+      current.rightChild = successorParent.rightChild;
+      return;
     }
 
     //iterates through the tree to find the node to delete
@@ -161,12 +176,8 @@ console.log(myTree.arrayOut());
 myTree.insert(4);
 myTree.insert(6);
 myTree.insert(77);
+myTree.insert(99);
+myTree.insert(65);
 myTree.prettyPrint();
-myTree.delete(19);
-myTree.prettyPrint();
-myTree.delete(15);
-myTree.prettyPrint();
-myTree.delete(9);
-myTree.prettyPrint();
-myTree.delete(5);
+myTree.delete(17);
 myTree.prettyPrint();
