@@ -169,15 +169,25 @@ class Tree {
       this.delete(delVal, current, parent, false);
     }
   }
+
+  find(val, current = this.root) {
+    if (val === current.value) {
+      console.log(current);
+      return current;
+    } else {
+      if (val < current.value) {
+        current = current.leftChild;
+        this.find(val, current);
+      }
+      if (val > current.value) {
+        current = current.rightChild;
+        this.find(val, current);
+      }
+    }
+  }
 }
 
 const myTree = new Tree(testArrSorted);
 console.log(myTree.arrayOut());
-myTree.insert(4);
-myTree.insert(6);
-myTree.insert(77);
-myTree.insert(99);
-myTree.insert(65);
 myTree.prettyPrint();
-myTree.delete(17);
-myTree.prettyPrint();
+myTree.find(15);
